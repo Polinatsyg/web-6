@@ -11,6 +11,16 @@ import (
 var counter = 0
 
 func handler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")                   // Разрешить доступ всем источникам (можно указать конкретный домен вместо "*")
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS") // Разрешённые методы
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type")       // Разрешённые заголовки
+
+	// Обрабатываем OPTIONS-запросы
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+
 	if r.Method == "POST" {
 		a, err := strconv.Atoi(r.FormValue("count"))
 		if err != nil {
